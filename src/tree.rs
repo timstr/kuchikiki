@@ -281,6 +281,20 @@ impl NodeRef {
         }
         s
     }
+
+    /// Create a deep copy of the node and all its descendants.
+    /// The returned node will be detached from the document
+    /// and will not have any siblings.
+    pub fn deep_clone(&self) -> NodeRef {
+        // TODO: reimplement without relying on recursion
+        // to avoid possible stack overflow for very
+        // deeply nested documents
+        let node = NodeRef::new(self.data.clone());
+        for child in self.children() {
+            node.append(child.deep_clone());
+        }
+        node
+    }
 }
 
 impl Node {
